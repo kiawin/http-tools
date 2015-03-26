@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+if [ -z $1 ]; then
+  echo "$0 - curl for CDN servers"
+  echo ""
+  echo "USAGE:"
+  echo "  $0 <hostname> "<cdn_server_ip>, ..." <path>"
+  echo ""
+  echo ""
+  echo "\"man curl\" for more information"
+fi
+
+#if [ $4 ]; then
+#  OPT=""
+#else
+#  OPT="-o /dev/null"
+#fi
+OPT="-I"
+
+for server in $2; do
+  curl $OPT -w "Connect: %{time_connect} TTFB: %{time_starttransfer} Total time: %{time_total} \n" -H "Host: $1" $server/$3 2>/dev/null | egrep "(Connect:|HTTP/)"
+done

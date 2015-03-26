@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+if [ -z $1 ]; then
+  echo "$0 - curl for CDN server"
+  echo ""
+  echo "USAGE:"
+  echo "  $0 <hostname> <cdn_server_ip> <path> [-I]"
+  echo ""
+  echo "OPTIONS:"
+  echo "  -I  -  display HTTP response header"
+  echo ""
+  echo "\"man curl\" for more information"
+fi
+
+if [ $4 ]; then
+  OPT=""
+else
+  OPT="-o /dev/null"
+fi
+
+curl $OPT -w "Connect: %{time_connect} TTFB: %{time_starttransfer} Total time: %{time_total} \n" -H "Host: $1" $2/$3 $4 2>/dev/null
